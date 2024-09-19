@@ -1,0 +1,28 @@
+{
+  "cli": {
+    "version": ">= 11.0.3"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "env": {
+        "EXPO_PUBLIC_API_URL": "http://192.168.1.101:5000/api/v1"
+      }
+    },
+    "preview": {
+      "distribution": "internal",
+      "env": {
+        "EXPO_PUBLIC_API_URL": "http://192.168.102.24:8000/api/v1"
+      }
+    },
+    "production": {
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://.../api/v1"
+      }
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}

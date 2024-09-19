@@ -1,7 +1,7 @@
 {
   "name": "clothes-huy-long-app",
   "main": "expo-router/entry",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "scripts": {
     "start": "expo start",
     "reset-project": "node ./scripts/reset-project.js",
@@ -19,7 +19,7 @@
     "@react-navigation/native": "^6.0.2",
     "expo": "~51.0.28",
     "expo-constants": "~16.0.2",
-    "expo-font": "~12.0.9",
+    "expo-font": "~12.0.10",
     "expo-linking": "~6.3.1",
     "expo-router": "~3.5.23",
     "expo-splash-screen": "~0.27.5",

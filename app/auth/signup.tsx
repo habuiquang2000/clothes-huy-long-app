@@ -133,7 +133,7 @@ export default function SignupScreen() {
           />
         </View>
       </ScrollView>
-      <View style={styles.buttomContainer}>
+      <View style={styles.buttonContainer}>
         <CustomButton text={"Sign up"} onPress={signUpHandle} />
       </View>
       <View style={styles.bottomContainer}>
@@ -151,11 +151,12 @@ export default function SignupScreen() {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+    width: "100%",
     backgroundColor: colors.light,
     alignItems: "center",
     justifyContent: "center",
-    paddingHorizontal: 20,
-    flex: 1,
+    padding: 20,
   },
   welconeContainer: {
     width: "100%",
@@ -163,7 +164,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    height: "15%",
+    height: "12%",
   },
   formContainer: {
     flex: 2,
@@ -175,7 +176,7 @@ const styles = StyleSheet.create({
   },
   logo: {
     resizeMode: "contain",
-    width: 80,
+    width: "50%",
   },
   forgetPasswordContainer: {
     marginTop: 10,
@@ -189,7 +190,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: "600",
   },
-  buttomContainer: {
+  buttonContainer: {
     width: "100%",
   },
   bottomContainer: {

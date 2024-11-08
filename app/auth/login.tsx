@@ -144,7 +144,7 @@ export default function LoginScreen() {
           </View>
         </View>
       </ScrollView>
-      <View style={styles.buttomContainer}>
+      <View style={styles.buttonContainer}>
         <CustomButton text={"Login"} onPress={loginHandle} />
       </View>
       <View style={styles.bottomContainer}>
@@ -214,9 +214,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: "600",
   },
-  buttomContainer: {
-    display: "flex",
-    justifyContent: "center",
+  buttonContainer: {
     width: "100%",
   },
   bottomContainer: {

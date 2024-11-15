@@ -1,7 +1,7 @@
 import { combineSlices, configureStore } from "@reduxjs/toolkit";
 
 import { userSlice } from "./features/user/userSlice";
-import { categoryListSlice } from "./features/category/categorySlice";
+import { categoryListSlice } from "./features/category/categoryListSlice";
 import { productListSlice } from "./features/product/productListSlice";
 import { cartSlice } from "./features/cart/cartSlice";
 

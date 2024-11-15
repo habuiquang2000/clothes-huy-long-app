@@ -1,6 +1,11 @@
 import { createAppSlice } from "@/stores/createAppSlice";
 import { UserStore } from "@/utils/storage";
-import { postLogin, postLogout, postSignup } from "@/services/auth.service";
+import {
+  postForgetPassword,
+  postLogin,
+  postLogout,
+  postSignup,
+} from "@/services/auth.service";
 
 import type { IStoreState } from "@/types/store";
 import type { IUser } from "@/types/auth";
@@ -121,7 +126,7 @@ export const userSlice = createAppSlice({
     ),
     forgetPasswordUserAsync: create.asyncThunk(
       async (payload: IUser, { rejectWithValue }) => {
-        const result: IResponse<IUser> = await postSignup(payload);
+        const result: IResponse<IUser> = await postForgetPassword(payload);
         if (!result.success) return rejectWithValue(result.message);
 
         return result;

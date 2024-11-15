@@ -7,13 +7,14 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   StatusBar,
+  Dimensions,
 } from "react-native";
 import { useNavigation } from "expo-router";
 import ProgressDialog from "react-native-progress-dialog";
 
 import { colors } from "@/constants";
 import InternetConnectionAlert from "@/components/InternetConnectionAlert";
-import TopBarContainer from "@/components/TopBarContainer";
+import TopBarAuth from "@/components/TopBar/TopBarAuth";
 import CustomInput from "@/components/CustomInput";
 import CustomButton from "@/components/CustomButton";
 import CustomAlert from "@/components/CustomAlert/CustomAlert";
@@ -21,50 +22,75 @@ import { useAppDispatch } from "@/stores/hooks";
 import { signupUserAsync } from "@/stores/features/user/userSlice";
 
 import type { INavigationPropParams } from "@/types";
+import type { IUser } from "@/types/auth";
+
+const { width } = Dimensions.get("window");
 
 export default function SignupScreen() {
   const dispatch = useAppDispatch();
   const navigation = useNavigation<INavigationPropParams>();
 
-  const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-
+  const [form, setForm] = useState<IUser>({
+    email: "",
+    name: "",
+    password: "",
+    confirmPassword: "",
+  });
   const [error, setError] = useState<string | null>(null);
   const [isloading, setIsloading] = useState<boolean>(false);
 
+  const setFormHandler = (value: string, key: string) => {
+    setForm((current) => ({
+      ...current,
+      [key]: value,
+    }));
+  };
+
+  const errorSetHandler = (msg: string) => {
+    setIsloading(false);
+    setError(msg);
+  };
+
   //method to post the user data to server for user signup using API call
   const signUpHandle = () => {
+    const { email, name, password, confirmPassword } = form;
+
     setIsloading(true);
     setError(null);
 
-    if (email == "") {
-      return setError("Please enter your email");
+    if (email?.trim().length == 0) {
+      errorSetHandler("Please enter your email");
+      return;
     }
-    if (name == "") {
-      return setError("Please enter your name");
+    if (name?.trim().length == 0) {
+      errorSetHandler("Please enter your name");
+      return;
     }
-    if (password == "") {
-      return setError("Please enter your password");
+    if (password?.trim().length == 0) {
+      errorSetHandler("Please enter your password");
+      return;
     }
-    if (!email.includes("@")) {
-      return setError("Email is not valid");
+    if (!email?.includes("@")) {
+      errorSetHandler("Email is not valid");
+      return;
     }
     if (email.length < 6) {
-      return setError("Email is too short");
+      errorSetHandler("Email is too short");
+      return;
     }
-    if (password.length < 5) {
-      return setError("Password must be 6 characters long");
+    if (password?.trim().length! < 5) {
+      errorSetHandler("Password must be 6 characters long");
+      return;
     }
     if (password != confirmPassword) {
-      return setError("password does not match");
+      errorSetHandler("password does not match");
+      return;
     }
 
     dispatch(signupUserAsync({ email, password, name, userType: "USER" }))
       .unwrap()
       .then((result) => {
-        if (result.success) navigation.navigate("login");
+        if (result.success) navigation.replace("login");
       })
       .catch((error) => {
         setError(error.message);
@@ -80,7 +106,7 @@ export default function SignupScreen() {
       <InternetConnectionAlert />
       <ProgressDialog visible={isloading} label={"Register ..."} />
 
-      <TopBarContainer />
+      <TopBarAuth />
       <ScrollView style={{ flex: 1, width: "100%" }}>
         <View style={styles.welconeContainer}>
           <Image
@@ -102,30 +128,32 @@ export default function SignupScreen() {
         <View style={styles.formContainer}>
           <CustomAlert message={error} type={"error"} />
           <CustomInput
-            value={name}
-            setValue={setName}
+            value={form.name}
+            setValue={(value: string) => setFormHandler(value, "name")}
             placeholder={"Name"}
             placeholderTextColor={colors.muted}
             radius={5}
           />
           <CustomInput
-            value={email}
-            setValue={setEmail}
+            value={form.email}
+            setValue={(value: string) => setFormHandler(value, "email")}
             placeholder={"Email"}
             placeholderTextColor={colors.muted}
             radius={5}
           />
           <CustomInput
-            value={password}
-            setValue={setPassword}
+            value={form.password}
+            setValue={(value: string) => setFormHandler(value, "password")}
             secureTextEntry={true}
             placeholder={"Password"}
             placeholderTextColor={colors.muted}
             radius={5}
           />
           <CustomInput
-            value={confirmPassword}
-            setValue={setConfirmPassword}
+            value={form.confirmPassword}
+            setValue={(value: string) =>
+              setFormHandler(value, "confirmPassword")
+            }
             secureTextEntry={true}
             placeholder={"Confirm Password"}
             placeholderTextColor={colors.muted}
@@ -138,10 +166,7 @@ export default function SignupScreen() {
       </View>
       <View style={styles.bottomContainer}>
         <Text>Already have an account?</Text>
-        <Text
-          onPress={() => navigation.navigate("login")}
-          style={styles.signupText}
-        >
+        <Text onPress={() => navigation.goBack()} style={styles.signupText}>
           Login
         </Text>
       </View>
@@ -154,17 +179,12 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     backgroundColor: colors.light,
-    alignItems: "center",
-    justifyContent: "center",
     padding: 20,
   },
   welconeContainer: {
     width: "100%",
-    display: "flex",
-    flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    height: "12%",
   },
   formContainer: {
     flex: 2,
@@ -176,7 +196,8 @@ const styles = StyleSheet.create({
   },
   logo: {
     resizeMode: "contain",
-    width: "50%",
+    height: width / 2,
+    width: width / 2,
   },
   forgetPasswordContainer: {
     marginTop: 10,

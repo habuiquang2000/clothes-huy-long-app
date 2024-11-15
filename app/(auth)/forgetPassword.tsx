@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from "react";
 import { StatusBar, StyleSheet, Text, View } from "react-native";
+import { useNavigation } from "expo-router";
 import ProgressDialog from "react-native-progress-dialog";
 
 import { colors } from "@/constants";
@@ -7,38 +8,48 @@ import CustomInput from "@/components/CustomInput";
 import CustomButton from "@/components/CustomButton";
 
 import InternetConnectionAlert from "@/components/InternetConnectionAlert";
-import TopBarContainer from "@/components/TopBarContainer";
+import TopBarAuth from "@/components/TopBar/TopBarAuth";
 import CustomAlert from "@/components/CustomAlert";
 
 import { useAppDispatch } from "@/stores/hooks";
 import { forgetPasswordUserAsync } from "@/stores/features/user/userSlice";
+import type { INavigationPropParams } from "@/types";
 
 export default function ForgetPasswordScreen() {
   const dispatch = useAppDispatch();
+  const navigation = useNavigation<INavigationPropParams>();
+
   const [email, setEmail] = useState("");
 
   const [error, setError] = useState<string | null>(null);
   const [isloading, setIsloading] = useState<boolean>(false);
 
+  const errorSetHandler = (msg: string) => {
+    setIsloading(false);
+    setError(msg);
+  };
+
   const sendInstructionsHandle = () => {
     setIsloading(true);
     setError(null);
 
-    if (email == "") {
-      return setError("Please enter your email");
+    if (email?.trim().length == 0) {
+      errorSetHandler("Please enter your email");
+      return;
     }
-
-    if (!email.includes("@")) {
-      return setError("Email is not valid");
+    if (!email?.includes("@")) {
+      errorSetHandler("Email is not valid");
+      return;
     }
     if (email.length < 6) {
-      return setError("Email is too short");
+      errorSetHandler("Email is too short");
+      return;
     }
 
     dispatch(forgetPasswordUserAsync({ email }))
       .unwrap()
       .then((result) => {
-        // if (result.success) navigation.navigate("login");
+        if (result.success) navigation.replace("login");
       })
       .catch((error) => {
         setError(error.message);
@@ -54,7 +65,7 @@ export default function ForgetPasswordScreen() {
       <InternetConnectionAlert />
       <ProgressDialog visible={isloading} label={"Register ..."} />
 
-      <TopBarContainer />
+      <TopBarAuth />
       <View style={styles.screenNameContainer}>
         <View>
           <Text style={styles.screenNameText}>Reset Password</Text>

@@ -10,4 +10,5 @@ export const postLogin = (payload: IUser): Promise<IResponse<IUser>> =>
 
 export const postLogout = (): Promise<IResponse<IUser>> => post("/logout");
 
-export const postForgetPassword = () => {};
+export const postForgetPassword = (payload: IUser): Promise<IResponse<IUser>> =>
+  post("/forget-password", JSON.stringify(payload));

@@ -43,26 +43,30 @@ export default function LoginScreen() {
       setIsloading(false);
       return setError("Please enter your email");
     }
+
     if (password == "") {
       setIsloading(false);
       return setError("Please enter your password");
     }
+
     if (!email.includes("@")) {
       setIsloading(false);
       return setError("Email is not valid");
     }
+
     // length of email must be greater than 5 characters
     if (email.length < 6) {
       setIsloading(false);
       return setError("Email is too short");
     }
+
     // length of password must be greater than 5 characters
     if (password.length < 6) {
       setIsloading(false);
       return setError("Password must be 6 characters long");
     }
-    //[check validation] -- End
 
+    //[check validation] -- End
     dispatch(loginUserAsync({ email, password }))
       .unwrap()
       .then((result) => {
@@ -74,12 +78,10 @@ export default function LoginScreen() {
           dispatch(setUserAsync(result.data))
             .unwrap()
             .then(() => {
-              navigation.replace(
-                result?.data?.userType == "ADMIN" ? "admin" : "(tabs)"
-              ); // naviagte to Admin Dashboard
+              navigation.replace("(tabs)"); // naviagte to Admin Dashboard
             });
         } else {
-          return setError(result.message ?? null);
+          setError(result.message ?? null);
         }
       })
       .catch((error) => {
@@ -92,14 +94,17 @@ export default function LoginScreen() {
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      // behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={styles.container}
     >
       <StatusBar />
       <InternetConnectionAlert />
       <ProgressDialog visible={isloading} label={"Login ..."} />
 
-      <ScrollView style={{ flex: 1, width: "100%" }}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={{ flex: 1, width: "100%" }}
+      >
         <View style={styles.welconeContainer}>
           <View>
             <Text style={styles.welcomeText}>Welcome to ClothesShop</Text>
@@ -177,8 +182,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
-    height: "30%",
     padding: 15,
+    marginVertical: 50,
   },
   formContainer: {
     flex: 3,
@@ -190,6 +195,7 @@ const styles = StyleSheet.create({
   },
   logo: {
     resizeMode: "contain",
+    height: 80,
     width: 80,
   },
   welcomeText: {

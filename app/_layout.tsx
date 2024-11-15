@@ -38,7 +38,8 @@ export default function RootLayout() {
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <StoreProvider>
         <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="auth" />
+          <Stack.Screen name="(auth)" />
+          <Stack.Screen name="(tabs)" />
           <Stack.Screen name="user" />
         </Stack>
       </StoreProvider>

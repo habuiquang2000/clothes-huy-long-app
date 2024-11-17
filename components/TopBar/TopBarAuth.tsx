@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { PropsWithChildren, useMemo } from "react";
 import { StyleSheet, View, TouchableOpacity } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useNavigation } from "expo-router";
@@ -8,7 +8,7 @@ import { colors } from "@/constants";
 
 import type { INavigationPropParams } from "@/types";
 
-const TopBarContainer = () => {
+const TopBarAuth = ({ children }: PropsWithChildren) => {
   const insets = useSafeAreaInsets();
   const navigation = useNavigation<INavigationPropParams>();
 
@@ -19,7 +19,7 @@ const TopBarContainer = () => {
           width: "100%",
           display: "flex",
           flexDirection: "row",
-          paddingTop: insets.top,
+          marginTop: insets.top,
           justifyContent: "flex-start",
           alignItems: "center",
         },
@@ -44,4 +44,4 @@ const TopBarContainer = () => {
   );
 };
 
-export default TopBarContainer;
+export default TopBarAuth;

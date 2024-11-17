@@ -4,6 +4,7 @@ import type { ICategory } from "./category";
 export interface IProduct {
   _id?: string;
   name?: string;
+  nameMaxLength?: number;
   title?: string;
   description?: string;
 
@@ -16,5 +17,5 @@ export interface IProduct {
 }
 
 export interface ProductCardProps extends ITouchable, IProduct {
-  cardSize?: "large";
+  cardSize?: "large" | "half" | "medium" | `${number}%`;
 }

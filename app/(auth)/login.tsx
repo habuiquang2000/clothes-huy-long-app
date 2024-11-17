@@ -7,7 +7,7 @@ import {
   StatusBar,
   KeyboardAvoidingView,
   ScrollView,
-  Platform,
+  Dimensions,
 } from "react-native";
 import { useNavigation } from "expo-router";
 import ProgressDialog from "react-native-progress-dialog";
@@ -21,6 +21,8 @@ import { useAppDispatch } from "@/stores/hooks";
 import { loginUserAsync, setUserAsync } from "@/stores/features/user/userSlice";
 
 import type { INavigationPropParams } from "@/types";
+
+const { width } = Dimensions.get("window");
 
 export default function LoginScreen() {
   const dispatch = useAppDispatch();
@@ -180,10 +182,26 @@ const styles = StyleSheet.create({
     width: "100%",
     display: "flex",
     flexDirection: "row",
-    justifyContent: "space-around",
+    justifyContent: "space-between",
     alignItems: "center",
-    padding: 15,
+    padding: 10,
     marginVertical: 50,
+  },
+  welcomeText: {
+    fontSize: width / 15,
+    fontWeight: "bold",
+    width: width / 2,
+    color: colors.muted,
+  },
+  welcomeParagraph: {
+    fontSize: 15,
+    fontWeight: "500",
+    color: colors.primary_shadow,
+  },
+  logo: {
+    resizeMode: "contain",
+    height: width / 3.5,
+    width: width / 3.5,
   },
   formContainer: {
     flex: 3,
@@ -192,21 +210,6 @@ const styles = StyleSheet.create({
     display: "flex",
     width: "100%",
     padding: 5,
-  },
-  logo: {
-    resizeMode: "contain",
-    height: 80,
-    width: 80,
-  },
-  welcomeText: {
-    fontSize: 42,
-    fontWeight: "bold",
-    color: colors.muted,
-  },
-  welcomeParagraph: {
-    fontSize: 15,
-    fontWeight: "500",
-    color: colors.primary_shadow,
   },
   forgetPasswordContainer: {
     marginTop: 10,

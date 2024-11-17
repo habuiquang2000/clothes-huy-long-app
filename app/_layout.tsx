@@ -12,16 +12,17 @@ import { StoreProvider } from "@/components/StoreProvider";
 
 // console.reportErrorsAsExceptions = false;
 
-import { useColorScheme } from "@/hooks/useColorScheme";
+// import { useColorScheme } from "@/hooks/useColorScheme";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
+  // const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     SpaceMonoRegular: require("../assets/fonts/SpaceMono-Regular.ttf"),
     RobotoRegular: require("../assets/fonts/Roboto-Regular.ttf"),
+    antoutline: require("@ant-design/icons-react-native/fonts/antoutline.ttf"),
   });
 
   useEffect(() => {
@@ -35,7 +36,8 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+    // <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+    <ThemeProvider value={DefaultTheme}>
       <StoreProvider>
         <Stack screenOptions={{ headerShown: false }}>
           <Stack.Screen name="(auth)" />

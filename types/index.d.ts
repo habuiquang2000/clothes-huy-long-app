@@ -54,8 +54,8 @@ export interface IOptionListProps extends ITouchable {
   type?: "morden" | "danger";
 }
 
-export interface CustomIconButtonProps extends ITouchable {
+export interface ICustomIconButtonProps extends ITouchable {
   text: string;
-  image: ImageSourcePropType | undefined;
+  image: ImageSourcePropType | string | undefined;
   active?: boolean;
 }

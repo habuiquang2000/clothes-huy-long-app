@@ -4,7 +4,7 @@ import { useNavigation } from "expo-router";
 
 import colors from "@/constants/Colors";
 import { useAppDispatch, useAppSelector } from "@/stores/hooks";
-import { getUserAsync, selectUser } from "@/stores/features/user/userSlice";
+import { getUserAsync, selectUser } from "@/stores/features/user/user.slice";
 
 import type { INavigationPropParams } from "@/types";
 import type { IUser } from "@/types/auth";

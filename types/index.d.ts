@@ -10,26 +10,14 @@ export interface INavigationParams {
   login: undefined; //current screen
   signup: undefined;
   forgetPassword: undefined;
-
   user: INestedRoute;
-
   myAccount: {
     user: any;
   };
-
-  ProductDetailScreen: {
-    slug?: string;
-    productId: string;
-  }; // a screen that we are
-  // navigating to, in the current screen,
-  // that we should pass a prop named `slug` to it
-
+  product: INestedRoute
   ScreenThree: {
     data: Array<string>;
   };
-
-  ScreenFour: undefined; // a screen that we are navigating to
-  // in the current screen, that we don't pass any props to it
 }
 
 export type INavigationPropParams = NavigationProp<INavigationParams> & {

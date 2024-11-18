@@ -1,9 +1,9 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { StyleSheet, TextInput, View } from "react-native";
 
 import colors from "@/constants/Colors";
 
-function CustomInput({
+export default function CustomInput({
   value,
   setValue,
   placeholder,
@@ -15,24 +15,6 @@ function CustomInput({
   keyboardType,
   maxLength,
 }: any) {
-  const styles = useMemo(
-    () =>
-      StyleSheet.create({
-        CustomInput: {
-          height: 40,
-          marginBottom: 10,
-          marginTop: 10,
-          borderRadius: radius,
-          width: "100%",
-          padding: 5,
-          backgroundColor: colors.white,
-          elevation: 5,
-          paddingHorizontal: 20,
-        },
-      }),
-    []
-  );
-
   return (
     <View style={{ width: width }}>
       <TextInput
@@ -40,7 +22,12 @@ function CustomInput({
         onChangeText={setValue}
         value={value}
         secureTextEntry={secureTextEntry}
-        style={styles.CustomInput}
+        style={[
+          styles.CustomInput,
+          {
+            borderRadius: radius,
+          },
+        ]}
         placeholderTextColor={placeholderTextColor}
         onFocus={onFocus}
         maxLength={maxLength}
@@ -50,4 +37,15 @@ function CustomInput({
   );
 }
 
-export default CustomInput;
+const styles = StyleSheet.create({
+  CustomInput: {
+    height: 40,
+    marginBottom: 10,
+    marginTop: 10,
+    width: "100%",
+    padding: 5,
+    backgroundColor: colors.white,
+    elevation: 5,
+    paddingHorizontal: 20,
+  },
+});

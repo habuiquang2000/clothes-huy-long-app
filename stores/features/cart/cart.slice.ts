@@ -1,10 +1,11 @@
+import type { PayloadAction } from "@reduxjs/toolkit";
+
 import { createAppSlice } from "@/stores/createAppSlice";
 
-import type { PayloadAction } from "@reduxjs/toolkit";
 import type { IStoreState } from "@/types/store";
-import type { IProduct } from "@/types/product";
+import type { ICart } from "@/types/cart";
 
-const initialState: IStoreState<IProduct[]> = {
+const initialState: IStoreState<ICart[]> = {
   data: null,
   error: undefined,
   status: "idle",
@@ -14,13 +15,11 @@ export const cartSlice = createAppSlice({
   name: "cart",
   initialState,
   reducers: (create) => ({
-    addProductToCart: create.reducer(
-      (state, action: PayloadAction<IProduct>) => {
-        if (!state.data) state.data = [];
+    addProductToCart: create.reducer((state, action: PayloadAction<ICart>) => {
+      if (!state.data) state.data = [];
 
-        state.data.push(action.payload);
-      }
-    ),
+      state.data.push(action.payload);
+    }),
   }),
 
   selectors: {

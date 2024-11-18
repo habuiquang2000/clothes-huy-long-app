@@ -16,8 +16,6 @@ import {
 import { useNavigation } from "expo-router";
 import { TabActions } from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import ProgressDialog from "react-native-progress-dialog";
-// import { Ionicons } from "@expo/vector-icons";
 
 import { EXPO_PUBLIC_STATICS_URL } from "@/utils/dotenv";
 import colors from "@/constants/Colors";
@@ -25,23 +23,21 @@ import CustomIconButton from "@/components/CustomIconButton/CustomIconButton";
 import ProductCard from "@/components/ProductCard/ProductCard";
 import InternetConnectionAlert from "@/components/InternetConnectionAlert";
 
-// import * as actionCreaters from "@/states/actionCreaters/actionCreaters";
 import { useAppDispatch, useAppSelector } from "@/stores/hooks";
-import { getUserAsync, selectUser } from "@/stores/features/user/userSlice";
-import { addProductToCart, selectCart } from "@/stores/features/cart/cartSlice";
+import { getUserAsync, selectUser } from "@/stores/features/user/user.slice";
+import { addProductToCart, selectCart } from "@/stores/features/cart/cart.slice";
 import {
   getCategoryListAsync,
   selectCategoryList,
-} from "@/stores/features/category/categoryListSlice";
+} from "@/stores/features/category/categoryList.slice";
 import {
   getProductListAsync,
   selectProductList,
-} from "@/stores/features/product/productListSlice";
+} from "@/stores/features/product/productList.slice";
 
 import type { INavigationPropParams } from "@/types";
 import type { IProduct } from "@/types/product";
-
-const { height } = Dimensions.get("window");
+import { ActivityIndicator } from "@ant-design/react-native";
 
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
@@ -55,9 +51,6 @@ export default function HomeScreen() {
 
   const [search, setSearch] = useState("");
   const [refeshing, setRefreshing] = useState(false);
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [searchItems, setSearchItems] = useState([]);
 
   const searchHandle = () => {
     const jumpToCategories = TabActions.jumpTo("categories", {
@@ -75,7 +68,7 @@ export default function HomeScreen() {
     navigation.dispatch(jumpToCategories);
   };
   const handleProductPress = (productId: string | undefined) => {
-    navigation.navigate("user", {
+    navigation.navigate("product", {
       screen: "details/[id]",
       params: { id: productId },
     });
@@ -113,26 +106,6 @@ export default function HomeScreen() {
     if (userSelector.data == null) dispatch(getUserAsync());
   }, []);
 
-  useEffect(() => {
-    const searchAbleItem: any = productListSelector.data?.reduce(
-      (
-        previousValue: IProduct[],
-        currentValue: IProduct,
-        currentIndex: number
-      ) => [
-        ...previousValue,
-        {
-          ...currentValue,
-          id: ++currentIndex,
-          name: currentValue.title,
-        },
-      ],
-      []
-    );
-
-    setSearchItems(searchAbleItem);
-  }, [productListSelector.data]);
-
   return (
     <View
       style={[
@@ -144,8 +117,8 @@ export default function HomeScreen() {
     >
       <StatusBar />
       <InternetConnectionAlert />
-      <ProgressDialog visible={isLoading} label={"Loading ..."} />
 
+      {/* TOPBAR - START */}
       <View style={styles.topBarContainer}>
         <View style={styles.searchContainer}>
           <View style={styles.inputContainer}>
@@ -194,7 +167,9 @@ export default function HomeScreen() {
           <Image source={require("@/assets/icons/cart_beg.png")} />
         </TouchableOpacity>
       </View>
+      {/* TOPBAR - END */}
 
+      {/* BODY CONTENT - START */}
       <View style={styles.bodyContainer}>
         <ScrollView
           nestedScrollEnabled
@@ -215,25 +190,29 @@ export default function HomeScreen() {
               <Text style={styles.primaryText}>Categories</Text>
             </View>
             <View style={styles.categoryContainer}>
-              <FlatList
-                showsHorizontalScrollIndicator={false}
-                horizontal={true}
-                data={categoryListSelector.data}
-                keyExtractor={(item, index) => `${item}-${index}`}
-                contentContainerStyle={{
-                  gap: 6,
-                }}
-                renderItem={({ item, index }) => (
-                  <CustomIconButton
-                    key={index}
-                    text={item.title}
-                    image={item.image}
-                    onPress={() => {
-                      handleCategoryPress(item._id);
-                    }}
-                  />
-                )}
-              />
+              {categoryListSelector.status === "idle" ? (
+                <FlatList
+                  showsHorizontalScrollIndicator={false}
+                  horizontal={true}
+                  data={categoryListSelector.data}
+                  keyExtractor={(item, index) => `${item}-${index}`}
+                  contentContainerStyle={{
+                    gap: 6,
+                  }}
+                  renderItem={({ item, index }) => (
+                    <CustomIconButton
+                      key={index}
+                      text={item.title}
+                      image={item.image}
+                      onPress={() => {
+                        handleCategoryPress(item._id);
+                      }}
+                    />
+                  )}
+                />
+              ) : (
+                <ActivityIndicator styles={{ container: { height: "100%" } }} />
+              )}
             </View>
           </View>
           {/* CATEGORIES - END */}
@@ -243,89 +222,34 @@ export default function HomeScreen() {
             <View style={styles.primaryTextContainer}>
               <Text style={styles.primaryText}>New Arrivals</Text>
             </View>
-            {productListSelector.data?.length === 0 ? (
-              <View style={styles.productCardContainerEmpty}>
-                <Text style={styles.productCardContainerEmptyText}>
-                  No Found Product
-                </Text>
-              </View>
-            ) : (
-              <FlatList
-                style={{
-                  marginHorizontal: 4,
-                  paddingHorizontal: 4,
-                  paddingVertical: 8,
-                }}
-                showsHorizontalScrollIndicator={false}
-                initialNumToRender={5}
-                horizontal={true}
-                data={productListSelector.data?.slice(0, 5)}
-                keyExtractor={(item) => item._id ?? ""}
-                contentContainerStyle={{
-                  gap: 3,
-                }}
-                renderItem={(info: ListRenderItemInfo<IProduct>) => (
-                  <ProductCard
-                    key={info.index}
-                    cardSize="medium"
-                    name={info.item.title}
-                    image={`${EXPO_PUBLIC_STATICS_URL}/uploads/${info.item.image}`}
-                    price={info.item.price}
-                    quantity={info.item.quantity}
-                    onPress={() => {
-                      handleProductPress(info.item._id);
-                    }}
-                    onPressSecondary={() => {
-                      handleAddToCart(info.item, 1);
-                    }}
-                  />
-                )}
-              />
-            )}
-          </View>
-          {/* NEW ARRIVALS - END */}
 
-          {/* PRODUCT FOR YOU - START */}
-          {productListSelector.data?.length === 0 ? (
-            <View style={styles.productCardContainerEmpty}>
-              <Text style={styles.productCardContainerEmptyText}>
-                No Found Product
-              </Text>
-            </View>
-          ) : (
-            <View style={styles.sectionGroup}>
-              <View style={styles.primaryTextContainer}>
-                <Text style={styles.primaryText}>Product For You</Text>
-              </View>
-              <View
-                style={{
-                  width: "100%",
-                  flex: 1,
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
+            {productListSelector.status === "idle" ? (
+              productListSelector.data?.length === 0 ? (
+                <View style={styles.productCardContainerEmpty}>
+                  <Text style={styles.productCardContainerEmptyText}>
+                    No Found Product
+                  </Text>
+                </View>
+              ) : (
                 <FlatList
                   style={{
-                    paddingBottom: 60,
+                    marginHorizontal: 4,
+                    paddingHorizontal: 4,
+                    paddingVertical: 8,
                   }}
-                  numColumns={2}
-                  contentContainerStyle={{
-                    gap: 6,
-                  }}
-                  columnWrapperStyle={{
-                    gap: 6,
-                  }}
-                  nestedScrollEnabled
-                  scrollEnabled={false}
-                  data={productListSelector.data}
+                  showsHorizontalScrollIndicator={false}
+                  initialNumToRender={5}
+                  horizontal={true}
+                  data={productListSelector.data?.slice(0, 5)}
                   keyExtractor={(item) => item._id ?? ""}
+                  contentContainerStyle={{
+                    gap: 3,
+                  }}
                   renderItem={(info: ListRenderItemInfo<IProduct>) => (
                     <ProductCard
                       key={info.index}
-                      cardSize="half"
+                      cardSize="medium"
                       name={info.item.title}
-                      nameMaxLength={12}
                       image={`${EXPO_PUBLIC_STATICS_URL}/uploads/${info.item.image}`}
                       price={info.item.price}
                       quantity={info.item.quantity}
@@ -338,12 +262,77 @@ export default function HomeScreen() {
                     />
                   )}
                 />
-              </View>
+              )
+            ) : (
+              <ActivityIndicator styles={{ container: { height: "100%" } }} />
+            )}
+          </View>
+          {/* NEW ARRIVALS - END */}
+
+          {/* PRODUCT FOR YOU - START */}
+          <View style={styles.sectionGroup}>
+            <View style={styles.primaryTextContainer}>
+              <Text style={styles.primaryText}>Product For You</Text>
             </View>
-          )}
+            <View
+              style={{
+                width: "100%",
+                flex: 1,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              {productListSelector.status === "idle" ? (
+                productListSelector.data?.length === 0 ? (
+                  <View style={styles.productCardContainerEmpty}>
+                    <Text style={styles.productCardContainerEmptyText}>
+                      No Found Product
+                    </Text>
+                  </View>
+                ) : (
+                  <FlatList
+                    style={{
+                      paddingBottom: 60,
+                    }}
+                    numColumns={2}
+                    contentContainerStyle={{
+                      gap: 6,
+                    }}
+                    columnWrapperStyle={{
+                      gap: 6,
+                    }}
+                    nestedScrollEnabled
+                    scrollEnabled={false}
+                    data={productListSelector.data}
+                    keyExtractor={(item) => item._id ?? ""}
+                    renderItem={(info: ListRenderItemInfo<IProduct>) => (
+                      <ProductCard
+                        key={info.index}
+                        cardSize="half"
+                        name={info.item.title}
+                        nameMaxLength={12}
+                        image={`${EXPO_PUBLIC_STATICS_URL}/uploads/${info.item.image}`}
+                        price={info.item.price}
+                        quantity={info.item.quantity}
+                        onPress={() => {
+                          handleProductPress(info.item._id);
+                        }}
+                        onPressSecondary={() => {
+                          handleAddToCart(info.item, 1);
+                        }}
+                      />
+                    )}
+                  />
+                )
+              ) : (
+                <ActivityIndicator styles={{ container: { height: "100%" } }} />
+              )}
+            </View>
+          </View>
           {/* PRODUCT FOR YOU - END */}
         </ScrollView>
       </View>
+      {/* BODY CONTENT - END */}
     </View>
   );
 }

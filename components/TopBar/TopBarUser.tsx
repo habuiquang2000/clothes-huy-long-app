@@ -6,7 +6,7 @@ import { Ionicons } from "@expo/vector-icons";
 
 import { colors } from "@/constants";
 import { useAppSelector } from "@/stores/hooks";
-import { selectCart } from "@/stores/features/cart/cartSlice";
+import { selectCart } from "@/stores/features/cart/cart.slice";
 
 import type { INavigationPropParams } from "@/types";
 

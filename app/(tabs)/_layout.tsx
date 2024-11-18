@@ -78,9 +78,7 @@ export default function TabLayout() {
           },
         ],
 
-        // headerShown: false,
         tabBarShowLabel: false,
-        // tabBarActiveTintColor: colors.primary,
 
         tabBarIcon: ({ focused }) => {
           const routename = route.name;

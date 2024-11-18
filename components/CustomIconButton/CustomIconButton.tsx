@@ -1,24 +1,56 @@
-import { StyleSheet, Text, TouchableOpacity, Image } from "react-native";
-import React from "react";
+import React, { useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  Image,
+  Dimensions,
+  type LayoutChangeEvent,
+} from "react-native";
+
+import { EXPO_PUBLIC_STATICS_URL } from "@/utils/dotenv";
 import { colors } from "@/constants";
-import { CustomIconButtonProps } from "@/types";
-// import garmentsIcon from "@/assets/icons/garments.png";
+import { ICustomIconButtonProps } from "@/types";
+
+const { width } = Dimensions.get("window");
 
 export default function CustomIconButton({
   text,
   image,
   onPress,
   active,
-}: CustomIconButtonProps) {
+}: ICustomIconButtonProps) {
+  const [buttonHeight, setButtonHeight] = useState(0);
+
+  const onButtonLayoutHandle = (event: LayoutChangeEvent) => {
+    const { x, y, height, width } = event.nativeEvent.layout;
+
+    if (!buttonHeight) setButtonHeight(height);
+  };
+
   return (
     <TouchableOpacity
+      onLayout={onButtonLayoutHandle}
       style={[
         styles.container,
-        { backgroundColor: active ? colors.primary_light : colors.white },
+        {
+          backgroundColor: active ? colors.primary_light : colors.white,
+        },
       ]}
       onPress={onPress}
     >
-      <Image source={image} style={styles.buttonIcon} />
+      <Image
+        source={{
+          uri: `${EXPO_PUBLIC_STATICS_URL}/uploads/categories/${image}`,
+        }}
+        style={[
+          styles.buttonIcon,
+          {
+            height: buttonHeight * 0.9,
+            width: buttonHeight * 0.9,
+          },
+        ]}
+      />
       <Text
         style={[
           styles.buttonText,
@@ -39,19 +71,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: colors.white,
     borderRadius: 10,
-    height: 40,
-    width: 110,
     elevation: 3,
-    margin: 5,
+    paddingVertical: 8,
+    paddingHorizontal: 8,
   },
   buttonText: {
-    fontSize: 12,
+    fontSize: width / 28,
     color: colors.muted,
     fontWeight: "bold",
   },
   buttonIcon: {
-    height: 20,
-    width: 35,
     resizeMode: "contain",
+    marginRight: 8,
   },
 });

@@ -12,7 +12,7 @@ import TopBarAuth from "@/components/TopBar/TopBarAuth";
 import CustomAlert from "@/components/CustomAlert";
 
 import { useAppDispatch } from "@/stores/hooks";
-import { forgetPasswordUserAsync } from "@/stores/features/user/userSlice";
+import { forgetPasswordUserAsync } from "@/stores/features/user/user.slice";
 import type { INavigationPropParams } from "@/types";
 
 export default function ForgetPasswordScreen() {

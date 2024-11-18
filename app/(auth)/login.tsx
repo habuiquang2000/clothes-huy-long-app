@@ -18,7 +18,10 @@ import CustomButton from "@/components/CustomButton";
 import CustomAlert from "@/components/CustomAlert/CustomAlert";
 import InternetConnectionAlert from "@/components/InternetConnectionAlert";
 import { useAppDispatch } from "@/stores/hooks";
-import { loginUserAsync, setUserAsync } from "@/stores/features/user/userSlice";
+import {
+  loginUserAsync,
+  setUserAsync,
+} from "@/stores/features/user/user.slice";
 
 import type { INavigationPropParams } from "@/types";
 
@@ -28,8 +31,8 @@ export default function LoginScreen() {
   const dispatch = useAppDispatch();
   const navigation = useNavigation<INavigationPropParams>();
 
-  const [email, setEmail] = useState<string>("email@gmail.com");
-  const [password, setPassword] = useState<string>("1234567");
+  const [email, setEmail] = useState<string>("user@gmail.com");
+  const [password, setPassword] = useState<string>("user1234");
 
   const [error, setError] = useState<string | null>(null);
   const [isloading, setIsloading] = useState<boolean>(false);
@@ -76,6 +79,7 @@ export default function LoginScreen() {
           result.status == 200 ||
           (result.status == 1 && result.success != false)
         ) {
+
           //check the user type if the type is ADMIN then navigate to Dashboard else navigate to User Home
           dispatch(setUserAsync(result.data))
             .unwrap()

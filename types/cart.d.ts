@@ -4,6 +4,7 @@ import { IProduct } from "./product";
 export interface ICart {
   product: IProduct;
   quantity: number;
+  category?: string;
 }
 
 export interface CartProductListProps extends IProduct, ITouchable {

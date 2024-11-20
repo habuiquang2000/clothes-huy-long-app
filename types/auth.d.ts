@@ -1,6 +1,7 @@
 import type { IProduct } from "./product";
 
 export interface IUser {
+  _id?: string;
   email?: string;
   phone?: string;
   password?: string;
@@ -10,7 +11,7 @@ export interface IUser {
   userType?: "USER" | "ADMIN";
   token?: string;
   wishlist?: {
-    productId: IProduct;
+    product: IProduct;
     quantity: number;
   }[];
 }

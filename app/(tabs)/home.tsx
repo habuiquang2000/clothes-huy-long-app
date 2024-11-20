@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useMemo } from "react";
 import {
   StyleSheet,
-  StatusBar,
   View,
   TouchableOpacity,
   Text,
@@ -60,17 +59,17 @@ export default function HomeScreen() {
     navigation.dispatch(jumpToCategories);
   };
 
-  const handleCategoryPress = (categoryId: string | undefined) => {
+  const handleCategoryPress = (id: string | undefined) => {
     const jumpToCategories = TabActions.jumpTo("categories", {
-      id: categoryId,
+      id,
     });
 
     navigation.dispatch(jumpToCategories);
   };
-  const handleProductPress = (productId: string | undefined) => {
+  const handleProductPress = (id: string | undefined) => {
     navigation.navigate("product", {
       screen: "details/[id]",
-      params: { id: productId },
+      params: { id },
     });
     // navigation.navigate("productdetail", { product: product });
   };
@@ -192,7 +191,7 @@ export default function HomeScreen() {
                   renderItem={({ item, index }) => (
                     <CustomIconButton
                       key={index}
-                      text={item.title}
+                      text={item.title!}
                       image={item.image}
                       onPress={() => {
                         handleCategoryPress(item._id);
@@ -239,7 +238,7 @@ export default function HomeScreen() {
                     <ProductCard
                       key={info.index}
                       cardSize="medium"
-                      name={info.item.title}
+                      title={info.item.title}
                       image={`${EXPO_PUBLIC_STATICS_URL}/uploads/${info.item.image}`}
                       price={info.item.price}
                       quantity={info.item.quantity}
@@ -299,7 +298,7 @@ export default function HomeScreen() {
                       <ProductCard
                         key={info.index}
                         cardSize="half"
-                        name={info.item.title}
+                        title={info.item.title}
                         nameMaxLength={12}
                         image={`${EXPO_PUBLIC_STATICS_URL}/uploads/${info.item.image}`}
                         price={info.item.price}

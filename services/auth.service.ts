@@ -12,3 +12,9 @@ export const postLogout = (): Promise<IResponse<IUser>> => post("/logout");
 
 export const postForgetPassword = (payload: IUser): Promise<IResponse<IUser>> =>
   post("/forget-password", JSON.stringify(payload));
+
+export const postDeleteUser = (payload: IUser): Promise<IResponse<IUser>> =>
+  post(`/delete-user?id=${payload._id}`, JSON.stringify(payload));
+
+export const postResetPassword = (payload: IUser): Promise<IResponse<IUser>> =>
+  post(`/reset-password?id=${payload._id}`, JSON.stringify(payload));

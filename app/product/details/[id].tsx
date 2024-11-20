@@ -104,7 +104,7 @@ const ProductDetailScreen = () => {
   useEffect(() => {
     setOnWishlist(
       wishlistSelector.data?.wishlist?.some(
-        (item) => item.productId._id === id
+        (item) => item.product._id === id
       ) || false
     );
   }, [wishlistSelector.data]);

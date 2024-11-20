@@ -19,7 +19,7 @@ import CustomInput from "@/components/CustomInput";
 import CustomButton from "@/components/CustomButton";
 import CustomAlert from "@/components/CustomAlert/CustomAlert";
 import { useAppDispatch } from "@/stores/hooks";
-import { signupUserAsync } from "@/stores/features/user/userSlice";
+import { signupUserAsync } from "@/stores/features/user/user.slice";
 
 import type { INavigationPropParams } from "@/types";
 import type { IUser } from "@/types/auth";
@@ -31,10 +31,10 @@ export default function SignupScreen() {
   const navigation = useNavigation<INavigationPropParams>();
 
   const [form, setForm] = useState<IUser>({
-    email: "",
-    name: "",
-    password: "",
-    confirmPassword: "",
+    email: "user@gmail.com",
+    name: "user mock",
+    password: "user1234",
+    confirmPassword: "user1234",
   });
   const [error, setError] = useState<string | null>(null);
   const [isloading, setIsloading] = useState<boolean>(false);

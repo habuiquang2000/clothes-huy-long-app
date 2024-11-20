@@ -4,17 +4,11 @@ import type { IUser } from "./auth";
 import type { IProduct } from "./product";
 import type { ICart } from "./cart";
 
-export interface IOrderItem extends IProduct {
-  productId?: string;
-  categoryId?: string;
-}
-
 export interface IOrder {
   orderId?: string;
   user?: IUser | string;
   status?: "pending" | "shipped" | "delivered";
-  createdAt?: Date;
-  items?: IOrderItem[] | ICart[];
+  items?: ICart[];
 
   amount?: number;
   discount?: number;
@@ -25,6 +19,9 @@ export interface IOrder {
   payment_type?: "cod" | "online";
   shippedOn?: string;
   deliveredOn?: string;
+
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface IOrderListProps extends ITouchable {

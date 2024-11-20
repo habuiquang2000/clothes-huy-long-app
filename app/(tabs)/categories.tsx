@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   Image,
-  TouchableOpacity,
   View,
   StatusBar,
   Text,
@@ -10,12 +9,10 @@ import {
   RefreshControl,
   Dimensions,
 } from "react-native";
-import ProgressDialog from "react-native-progress-dialog";
-import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useNavigation } from "expo-router";
 
+import { EXPO_PUBLIC_STATICS_URL } from "@/utils/dotenv";
 import { colors } from "@/constants";
-// import * as actionCreaters from "@/states/actionCreaters/actionCreaters";
 import CustomIconButton from "@/components/CustomIconButton/CustomIconButton";
 import ProductCard from "@/components/ProductCard/ProductCard";
 import CustomInput from "@/components/CustomInput";
@@ -43,17 +40,20 @@ export default function CategoriesScreen() {
   const categoryListSelector = useAppSelector(selectCategoryList);
 
   const navigation = useNavigation<INavigationPropParams>();
-  const { categoryID } = useLocalSearchParams();
+  const { id, search } = useLocalSearchParams<{ id: string; search: string }>();
 
-  const [isLoading, setIsLoading] = useState(false);
   const [refeshing, setRefreshing] = useState(false);
-  const [label, setLabel] = useState("Loading...");
-  const [error, setError] = useState("");
   const [foundItems, setFoundItems] = useState<IProduct[]>([]);
-  const [filterItem, setFilterItem] = useState("");
+  const [filterItem, setFilterItem] = useState(search || "");
+  const [selectedTab, setSelectedTab] = useState<ICategory>();
 
-  const handleAddToCat = (product: IProduct) => {
-    // dispatch(addProductToCart(product));
+  const handleAddToCat = (product: IProduct, quantity: number) => {
+    dispatch(
+      addProductToCart({
+        product,
+        quantity,
+      })
+    );
   };
 
   //method call on pull refresh
@@ -63,27 +63,21 @@ export default function CategoriesScreen() {
     setRefreshing(false);
   };
 
-  var headerOptions = {
-    method: "GET",
-    redirect: "follow",
-  };
-
-  const [selectedTab, setSelectedTab] = useState<ICategory>(() => {
-    if (categoryListSelector.data) return categoryListSelector.data[0];
-    return {
-      title: "",
-      image: "",
-    };
-  });
-
   const fetchProduct = () => {
-    dispatch(getProductListAsync());
+    dispatch(getProductListAsync())
+      .unwrap()
+      .then((result) => {
+        setSelectedTab((prev) => ({
+          ...prev,
+          _id: id || result.data![0]._id,
+        }));
+      });
   };
 
-  //listener call on tab focus and initlize categoryID
+  //listener call on tab focus and initlize id
   // navigation.addListener("focus", () => {
-  //   if (categoryID) {
-  //     setSelectedTab(categoryID);
+  //   if (id) {
+  //     setSelectedTab(id);
   //   }
   // });
 
@@ -115,7 +109,6 @@ export default function CategoriesScreen() {
     <View style={styles.container}>
       <StatusBar />
       <InternetConnectionAlert />
-      <ProgressDialog visible={isLoading} label={"Loading ..."} />
 
       <TopBarUser canGoBack />
 
@@ -135,12 +128,12 @@ export default function CategoriesScreen() {
           style={{ flexGrow: 0 }}
           contentContainerStyle={{ padding: 10 }}
           showsHorizontalScrollIndicator={false}
-          renderItem={({ item: tab }) => (
+          renderItem={({ item: tab }: any) => (
             <CustomIconButton
-              // key={tab}
+              key={tab}
               text={tab.title}
               image={tab.image}
-              active={selectedTab?.title === tab.title ? true : false}
+              active={selectedTab?._id === tab._id}
               onPress={() => {
                 setSelectedTab(tab);
               }}
@@ -195,15 +188,19 @@ export default function CategoriesScreen() {
               >
                 <ProductCard
                   cardSize={"large"}
-                  name={product.title}
-                  image={`https://d38b044pevnwc9.cloudfront.net/cutout-nuxt/enhancer/3.jpg`}
-                  // image={`${network.serverip}/uploads/${product.image}`}
+                  title={product.title}
+                  image={`${EXPO_PUBLIC_STATICS_URL}/uploads/${product.image}`}
                   price={product.price}
                   quantity={product.quantity}
                   onPress={() => {
-                    // navigation.navigate("productdetail", { product: product });
+                    navigation.navigate("product", {
+                      screen: "details/[id]",
+                      params: { id },
+                    });
                   }}
-                  onPressSecondary={handleAddToCat}
+                  onPressSecondary={() => {
+                    handleAddToCat(product, 1);
+                  }}
                 />
                 <View style={styles.emptyView}></View>
               </View>

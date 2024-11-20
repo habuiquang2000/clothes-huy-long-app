@@ -18,6 +18,7 @@ export const categoryListSlice = createAppSlice({
     getCategoryListAsync: create.asyncThunk(
       async (_, { rejectWithValue }) => {
         const result: IResponse<ICategory[]> = await getCategoryList();
+        console.log(result);
         if (!result.success) return rejectWithValue(result.message);
 
         return result;
@@ -29,29 +30,7 @@ export const categoryListSlice = createAppSlice({
         fulfilled: (state, action) => {
           state.status = "success";
           state.status = "idle";
-          // state.data = action.payload.data;
-          state.data = [
-            {
-              _id: "62fe244f58f7aa8230817f89",
-              title: "Garments",
-              image: "garments.png",
-            },
-            {
-              _id: "62fe243858f7aa8230817f86",
-              title: "Electornics",
-              image: "electronics.png",
-            },
-            {
-              _id: "62fe241958f7aa8230817f83",
-              title: "Cosmentics",
-              image: "cosmetics.png",
-            },
-            {
-              _id: "62fe246858f7aa8230817f8c",
-              title: "Groceries",
-              image: "grocery.png",
-            },
-          ];
+          state.data = action.payload.data;
         },
         rejected: (state, action) => {
           state.status = "failed";

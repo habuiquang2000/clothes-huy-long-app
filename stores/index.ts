@@ -6,6 +6,7 @@ import { productListSlice } from "./features/product/productList.slice";
 import { productDetailSlice } from "./features/product/productDetail.slice";
 import { wishlistSlice } from "./features/product/wishlist.slice";
 import { cartSlice } from "./features/cart/cart.slice";
+import { orderSlice } from "./features/cart/order.slice";
 
 import type { Action, ThunkAction } from "@reduxjs/toolkit";
 
@@ -15,7 +16,8 @@ const rootReducer = combineSlices(
   productListSlice,
   productDetailSlice,
   wishlistSlice,
-  cartSlice
+  cartSlice,
+  orderSlice
 );
 export type RootState = ReturnType<typeof rootReducer>;
 

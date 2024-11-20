@@ -18,7 +18,7 @@ export const postCheckout = async ({
   const { items, amount }: any = itemCart?.reduce(
     (accumulator: IOrder, object: any) => {
       accumulator.items?.push({
-        productId: object.product._id,
+        product: object.product._id,
         price: object.product.price,
         quantity: object.quantity,
       } as any);
@@ -51,7 +51,7 @@ export const postCheckout = async ({
   );
 };
 
-export const getOrderList = async (): Promise<IResponse<IOrder>> => {
+export const getOrderList = async (): Promise<IResponse<IOrder[]>> => {
   const value = await new UserStore().get();
 
   const user: IUser = value != null ? JSON.parse(value) : value;

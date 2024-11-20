@@ -56,7 +56,7 @@ export const wishlistSlice = createAppSlice({
           return rejectWithValue(result.message);
         } else {
           const result: IResponse<IUser> = await postAddToWishlist({
-            productId: payload.id,
+            product: payload.id,
             quantity: 1,
           });
           if (result.success) return result;

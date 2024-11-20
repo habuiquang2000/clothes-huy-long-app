@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet, Image, Text, View, StatusBar } from "react-native";
 import { useNavigation } from "expo-router";
 
+import SafeAreaContainer from "@/components/SafeAreaContainer";
 import CustomButton from "@/components/CustomButton";
 import type { INavigationPropParams } from "@/types";
 
@@ -9,7 +10,7 @@ const OrderConfirmScreen = () => {
   const navigation = useNavigation<INavigationPropParams>();
 
   return (
-    <View style={styles.container}>
+    <SafeAreaContainer>
       <View style={styles.imageConatiner}>
         <Image
           source={require("@/assets/icons/success.png")}
@@ -25,7 +26,7 @@ const OrderConfirmScreen = () => {
           }}
         />
       </View>
-    </View>
+    </SafeAreaContainer>
   );
 };
 

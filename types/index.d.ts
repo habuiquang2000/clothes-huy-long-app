@@ -14,7 +14,7 @@ export interface INavigationParams {
   myAccount: {
     user: any;
   };
-  product: INestedRoute
+  product: INestedRoute;
   ScreenThree: {
     data: Array<string>;
   };
@@ -37,6 +37,7 @@ export interface ITouchable {
 }
 
 export interface IOptionListProps extends ITouchable {
+  disabled?: boolean;
   iconName: any;
   text: string;
   type?: "morden" | "danger";

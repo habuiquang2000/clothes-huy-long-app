@@ -2,6 +2,7 @@ import type { IProduct } from "./product";
 
 export interface IUser {
   email?: string;
+  phone?: string;
   password?: string;
   confirmPassword?: string;
   avatarLinh?: string;

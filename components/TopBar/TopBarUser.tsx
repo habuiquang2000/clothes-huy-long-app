@@ -25,7 +25,7 @@ const TopBarUser = ({ children, canGoBack }: Prop) => {
   };
 
   const navigateCartHandle = () => {
-    navigation.navigate("user", {
+    navigation.navigate("product", {
       screen: "cart",
     });
   };
@@ -61,7 +61,7 @@ const TopBarUser = ({ children, canGoBack }: Prop) => {
           source={require("@/assets/images/icon.png")}
           style={styles.logo}
         />
-        <Text style={styles.toBarText}>EasyBuy</Text>
+        <Text style={styles.toBarText}>Huy Long Clothes</Text>
       </View>
 
       {/*  */}

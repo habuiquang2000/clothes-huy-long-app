@@ -9,23 +9,25 @@ import {
   FlatList,
   RefreshControl,
   ScrollView,
-  Dimensions,
-  type ListRenderItemInfo,
   TextInput,
+  type ListRenderItemInfo,
 } from "react-native";
 import { useNavigation } from "expo-router";
 import { TabActions } from "@react-navigation/native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { ActivityIndicator } from "@ant-design/react-native";
 
 import { EXPO_PUBLIC_STATICS_URL } from "@/utils/dotenv";
 import colors from "@/constants/Colors";
+import SafeAreaContainer from "@/components/SafeAreaContainer";
 import CustomIconButton from "@/components/CustomIconButton/CustomIconButton";
 import ProductCard from "@/components/ProductCard/ProductCard";
-import InternetConnectionAlert from "@/components/InternetConnectionAlert";
 
 import { useAppDispatch, useAppSelector } from "@/stores/hooks";
 import { getUserAsync, selectUser } from "@/stores/features/user/user.slice";
-import { addProductToCart, selectCart } from "@/stores/features/cart/cart.slice";
+import {
+  addProductToCart,
+  selectCart,
+} from "@/stores/features/cart/cart.slice";
 import {
   getCategoryListAsync,
   selectCategoryList,
@@ -37,10 +39,8 @@ import {
 
 import type { INavigationPropParams } from "@/types";
 import type { IProduct } from "@/types/product";
-import { ActivityIndicator } from "@ant-design/react-native";
 
 export default function HomeScreen() {
-  const insets = useSafeAreaInsets();
   const dispatch = useAppDispatch();
   const userSelector = useAppSelector(selectUser);
   const cartSelector = useAppSelector(selectCart);
@@ -107,17 +107,7 @@ export default function HomeScreen() {
   }, []);
 
   return (
-    <View
-      style={[
-        styles.container,
-        {
-          marginTop: insets.top,
-        },
-      ]}
-    >
-      <StatusBar />
-      <InternetConnectionAlert />
-
+    <SafeAreaContainer>
       {/* TOPBAR - START */}
       <View style={styles.topBarContainer}>
         <View style={styles.searchContainer}>
@@ -152,7 +142,7 @@ export default function HomeScreen() {
         <TouchableOpacity
           style={styles.cartIconContainer}
           onPress={() => {
-            navigation.navigate("user", {
+            navigation.navigate("product", {
               screen: "cart",
             });
           }}
@@ -333,7 +323,7 @@ export default function HomeScreen() {
         </ScrollView>
       </View>
       {/* BODY CONTENT - END */}
-    </View>
+    </SafeAreaContainer>
   );
 }
 

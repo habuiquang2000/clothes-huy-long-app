@@ -6,8 +6,6 @@ export default function RootLayout() {
       <Stack.Screen name="account" />
       <Stack.Screen name="wishlist" />
       <Stack.Screen name="updatePassword" />
-
-      <Stack.Screen name="cart" />
     </Stack>
   );
 }

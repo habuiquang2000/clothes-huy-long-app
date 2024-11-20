@@ -18,7 +18,35 @@ export const cartSlice = createAppSlice({
     addProductToCart: create.reducer((state, action: PayloadAction<ICart>) => {
       if (!state.data) state.data = [];
 
-      state.data.push(action.payload);
+      const itemIndex = state.data.findIndex(
+        (item) => item.product._id === action.payload.product._id
+      );
+
+      if (itemIndex != -1)
+        state.data[itemIndex].quantity += action.payload.quantity;
+      else state.data.push(action.payload);
+    }),
+    decreaseProductInCart: create.reducer(
+      (state, action: PayloadAction<{ id: string; quantity: number }>) => {
+        if (!state.data) state.data = [];
+        const itemIndex = state.data.findIndex(
+          (item) => item.product._id === action.payload.id
+        );
+        if (itemIndex != -1)
+          state.data[itemIndex].quantity -= action.payload.quantity;
+      }
+    ),
+    removeProductInCart: create.reducer(
+      (state, action: PayloadAction<string>) => {
+        if (!state.data) state.data = [];
+        const itemIndex = state.data.findIndex(
+          (item) => item.product._id === action.payload
+        );
+        if (itemIndex != -1) state.data.splice(itemIndex, 1);
+      }
+    ),
+    emptyCart: create.reducer((state, action: PayloadAction) => {
+      state.data = [];
     }),
   }),
 
@@ -27,6 +55,11 @@ export const cartSlice = createAppSlice({
   },
 });
 
-export const { addProductToCart } = cartSlice.actions;
+export const {
+  addProductToCart,
+  decreaseProductInCart,
+  removeProductInCart,
+  emptyCart,
+} = cartSlice.actions;
 
 export const { selectCart } = cartSlice.selectors;

@@ -1,20 +1,12 @@
 import React, { useState, useEffect } from "react";
-import {
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  View,
-  StatusBar,
-  Text,
-} from "react-native";
+import { StyleSheet, Image, TouchableOpacity, View, Text } from "react-native";
 import ProgressDialog from "react-native-progress-dialog";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useLocalSearchParams, useNavigation } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 
+import SafeAreaContainer from "@/components/SafeAreaContainer";
 import CustomButton from "@/components/CustomButton";
 import CustomAlert from "@/components/CustomAlert/CustomAlert";
-import InternetConnectionAlert from "@/components/InternetConnectionAlert";
 
 import { EXPO_PUBLIC_STATICS_URL } from "@/utils/dotenv";
 import { colors } from "@/constants";
@@ -37,7 +29,6 @@ import type { IAlertType, INavigationPropParams } from "@/types";
 import type { IProduct } from "@/types/product";
 
 const ProductDetailScreen = () => {
-  const insets = useSafeAreaInsets();
   const { id } = useLocalSearchParams<{ id: string }>();
   const dispatch = useAppDispatch();
   const cartSelector = useAppSelector(selectCart);
@@ -62,7 +53,7 @@ const ProductDetailScreen = () => {
   };
 
   const navigateCartHandle = () => {
-    navigation.navigate("user", {
+    navigation.navigate("product", {
       screen: "cart",
     });
   };
@@ -119,16 +110,7 @@ const ProductDetailScreen = () => {
   }, [wishlistSelector.data]);
 
   return (
-    <View
-      style={[
-        styles.container,
-        {
-          marginTop: insets.top,
-        },
-      ]}
-    >
-      <StatusBar />
-      <InternetConnectionAlert />
+    <SafeAreaContainer>
       <ProgressDialog
         visible={productDetailSelector.status === "loading"}
         label={"Loading ..."}
@@ -262,20 +244,13 @@ const ProductDetailScreen = () => {
         </View>
       </View>
       {/* BODY CONTENT - END */}
-    </View>
+    </SafeAreaContainer>
   );
 };
 
 export default ProductDetailScreen;
 
 const styles = StyleSheet.create({
-  container: {
-    width: "100%",
-    backgroundColor: colors.light,
-    alignItems: "center",
-    justifyContent: "flex-start",
-    flex: 1,
-  },
   topBarContainer: {
     width: "100%",
     display: "flex",

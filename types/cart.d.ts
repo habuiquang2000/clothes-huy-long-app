@@ -7,6 +7,8 @@ export interface ICart {
 }
 
 export interface CartProductListProps extends IProduct, ITouchable {
+  disableDecrement?: boolean;
+  disableIncrement?: boolean;
   handleDelete?: ((event: GestureResponderEvent) => void) | undefined;
   onPressDecrement?: ((event: GestureResponderEvent) => void) | undefined;
   onPressIncrement?: ((event: GestureResponderEvent) => void) | undefined;

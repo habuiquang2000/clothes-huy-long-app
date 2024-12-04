@@ -9,11 +9,7 @@ const WishList = ({
   description = "",
   onPressRemove,
   onPressView,
-}) => {
-  const [onWishlist, setOnWishlist] = useState(true);
-  const handleChangeState = () => {
-    onPressRemove();
-  };
+}: any) => {
   return (
     <TouchableOpacity style={styles.container} onPress={onPressView}>
       <View style={styles.detailContainer}>
@@ -31,18 +27,11 @@ const WishList = ({
           )}..`}</Text>
         </View>
       </View>
-      <View style={styles.categoryActionContainer}>
+      <View>
         <View style={styles.infoButtonContainer}>
           <View style={styles.wishlistButtonContainer}>
-            <TouchableOpacity
-              style={styles.iconContainer}
-              onPress={() => handleChangeState()}
-            >
-              {onWishlist == false ? (
-                <Ionicons name="heart" size={25} color={colors.muted} />
-              ) : (
-                <Ionicons name="heart" size={25} color={colors.danger} />
-              )}
+            <TouchableOpacity onPress={onPressRemove}>
+              <Ionicons name="heart" size={25} color={colors.danger} />
             </TouchableOpacity>
           </View>
         </View>

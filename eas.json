@@ -7,18 +7,18 @@
       "developmentClient": true,
       "distribution": "internal",
       "env": {
-        "EXPO_PUBLIC_API_URL": "http://192.168.1.101:5000/api/v1"
+        "EXPO_PUBLIC_API_URL": "http://vietnambychristine.com:8080"
       }
     },
     "preview": {
       "distribution": "internal",
       "env": {
-        "EXPO_PUBLIC_API_URL": "http://192.168.102.24:8000/api/v1"
+        "EXPO_PUBLIC_API_URL": "http://vietnambychristine.com:8080"
       }
     },
     "production": {
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://.../api/v1"
+        "EXPO_PUBLIC_API_URL": "http://vietnambychristine.com:8080"
       }
     }
   },

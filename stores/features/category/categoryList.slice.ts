@@ -18,7 +18,6 @@ export const categoryListSlice = createAppSlice({
     getCategoryListAsync: create.asyncThunk(
       async (_, { rejectWithValue }) => {
         const result: IResponse<ICategory[]> = await getCategoryList();
-        console.log(result);
         if (!result.success) return rejectWithValue(result.message);
 
         return result;
